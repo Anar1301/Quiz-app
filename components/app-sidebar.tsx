@@ -1,3 +1,4 @@
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -6,8 +7,26 @@ import {
   SidebarHeader,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useEffect, useState } from "react";
 
 export function AppSidebar() {
+  type History = {
+    articletitle: string;
+  };
+  const [history, SetHistory] = useState<History[]>([]);
+  const getHistory = async () => {
+    const result = await fetch("/api/generate");
+
+    const responseData = await result.json();
+    console.log({ responseData });
+    const { data } = responseData;
+    SetHistory(data.rows);
+  };
+  useEffect(() => {
+    getHistory();
+  }, []);
+  console.log({ history });
+
   return (
     <Sidebar className="mt-16">
       <div className="flex items-center mx-4 justify-between  gap-20 mt-4 ">
@@ -18,22 +37,9 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <div className="mx-4">
-          <div className="h-6 font-semibold ">Genghis Khan</div>
-          <div className="h-6 font-semibold ">Figma ашиглах заавар</div>
-          <div className="h-6 font-semibold ">Санхүүгийн шийдлүүд</div>
-          <div className="h-6 font-semibold ">
-            Figma-д загвар зохион бүтээх аргачлалууд
-          </div>
-          <br />
-          <div className="h-6 font-semibold ">Санхүүгийн технологи 2023</div>
-          <div className="h-6 font-semibold ">
-            Хэрэглэгчийн интерфейс дизайны шилдэг туршлага
-          </div>
-          <br />
-          <div className="h-6 font-semibold ">
-            Архитектур загварчлалын хөтлөлбөрүүд
-          </div>
-          <br />
+          {history.map((data) => (
+            <div className="h-6 font-semibold my-2 ">{data.articletitle}</div>
+          ))}
         </div>
         <SidebarGroup />
         <SidebarGroup />
