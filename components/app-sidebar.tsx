@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -10,8 +11,10 @@ import {
 import { useEffect, useState } from "react";
 
 export function AppSidebar() {
+  const router = useRouter();
   type History = {
     articletitle: string;
+    id: string;
   };
   const [history, SetHistory] = useState<History[]>([]);
   const getHistory = async () => {
@@ -26,6 +29,10 @@ export function AppSidebar() {
     getHistory();
   }, []);
   console.log({ history });
+  const HistoryOnclick = async (data: { id: string }) => {
+    const ID = data.id;
+    router.push(`/history?id=${ID}`);
+  };
 
   return (
     <Sidebar className="mt-16">
@@ -37,8 +44,14 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <div className="mx-4">
-          {history.map((data) => (
-            <div className="h-6 font-semibold my-2 ">{data.articletitle}</div>
+          {history.map((data, index) => (
+            <div
+              key={index}
+              onClick={() => HistoryOnclick(data)}
+              className="h-6 font-semibold my-2 "
+            >
+              {data.articletitle}
+            </div>
           ))}
         </div>
         <SidebarGroup />

@@ -1,3 +1,4 @@
+// src/lib/connectDB.ts
 import pkg from "pg";
 const { Pool } = pkg;
 
