@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
       contents: prompt,
     });
     await query(
-      `INSERT INTO articles (articletitle, articlecontent ) VALUES ($1,$2)`,
-      [articleTitle, articlecontent]
+      `INSERT INTO articles (title, content, summery ) VALUES ($1,$2, $3)`,
+      [articleTitle, articlecontent, response.text]
     );
     const id = await query("SELECT id FROM articles ORDER BY id DESC LIMIT 1");
     console.log({ id });
