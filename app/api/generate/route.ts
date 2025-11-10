@@ -1,12 +1,14 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/connectDb";
+import { prisma } from "@/lib/prisma";
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 export async function GET() {
-  const history = await query("SELECT articletitle , id FROM articles");
+  // const history = await query("SELECT articletitle , id FROM articles");
+  const history = await prisma.article.findMany();
   return Response.json({ data: history });
 }
 
@@ -15,6 +17,16 @@ export async function POST(req: NextRequest) {
     const { articleSummary, takeID } = await req.json();
     console.log({ articleSummary });
     console.log({ takeID });
+    const newHistory = await prisma.article.create({
+      data: {
+        id: "",
+        email: "25LP9181@nest.edu.mn",
+        title: "",
+        content: "",
+        answer: "",
+        summery: "",
+      },
+    });
 
     // 1. Шалгах: articleSummary байхгүй бол бидэнд ажиллах юм алга
     if (!articleSummary || !takeID) {

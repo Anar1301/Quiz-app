@@ -43,6 +43,17 @@ export function AppSidebar() {
       </div>
 
       <SidebarHeader />
+      <div className="font-extrabold h-7">Genghis Khan</div>
+      <div className="font-extrabold h-7">Figma ашиглах заавар</div>
+      <div className="font-extrabold h-7">Санхүүгийн шийдвэрүүд</div>
+      <div className="font-extrabold h-7">
+        Figma-д загвар зохион бүтээх аргачлалууд
+      </div>
+      <br></br>
+      <div className="font-extrabold h-7">Санхүүгийн технологи 2023</div>
+      <div className="font-extrabold h-7">
+        Хэрэглэгчийн интерфейс дизайны шилдэг туршлага
+      </div>
       <SidebarContent>
         <div className="mx-4">
           {history.map((data, index) => (
