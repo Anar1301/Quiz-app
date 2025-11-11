@@ -1,19 +1,18 @@
-// Backend: /api/history/route.ts
 import { query } from "@/lib/connectDb";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const { ID } = await req.json();
-    console.log({ ID });
 
     const historyArticles = await query(
       `
       SELECT 
         a.id, 
-        a.articletitle, 
-         a.articlecontent, 
-        a.articlesummary, 
+        a.title, 
+        a.content, 
+        a.summery, 
         q.question, 
         q.options, 
         q.answer
@@ -21,10 +20,9 @@ export async function POST(req: NextRequest) {
       LEFT JOIN quiz q ON a.id = q.article_id
       WHERE a.id = $1
       `,
-      [ID] // Always use parameterized query to prevent SQL injection
+      [ID]
     );
 
-    console.log({ historyArticles });
     return NextResponse.json({ data: historyArticles.rows ?? [] });
   } catch (error: any) {
     console.error("Error fetching history:", error);

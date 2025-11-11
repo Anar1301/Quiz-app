@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export function AppSidebar() {
   const router = useRouter();
   type History = {
-    articletitle: string;
+    title: string;
     id: string;
   };
   const [history, SetHistory] = useState<History[]>([]);
@@ -21,9 +21,10 @@ export function AppSidebar() {
     const result = await fetch("/api/generate");
 
     const responseData = await result.json();
-    console.log({ responseData });
+
     const { data } = responseData;
-    SetHistory(data.rows);
+
+    SetHistory(data);
   };
   useEffect(() => {
     getHistory();
@@ -34,6 +35,25 @@ export function AppSidebar() {
     // router.push(`/history?id=${ID}`);
     router.push(`/turshih?search=${ID}`);
   };
+  const DeleteTitle = async (data: { id: string }) => {
+    if (confirm("Are u sure ?") === true) {
+      const ID = data.id;
+
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+      const response = await fetch(`${baseUrl}/api/history/DeleteHistory`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ID }),
+        cache: "no-store",
+      });
+      getHistory();
+      return response;
+    } else {
+      return;
+    }
+  };
 
   return (
     <Sidebar className="mt-16">
@@ -43,28 +63,24 @@ export function AppSidebar() {
       </div>
 
       <SidebarHeader />
-      <div className="font-extrabold h-7">Genghis Khan</div>
-      <div className="font-extrabold h-7">Figma ашиглах заавар</div>
-      <div className="font-extrabold h-7">Санхүүгийн шийдвэрүүд</div>
-      <div className="font-extrabold h-7">
-        Figma-д загвар зохион бүтээх аргачлалууд
-      </div>
-      <br></br>
-      <div className="font-extrabold h-7">Санхүүгийн технологи 2023</div>
-      <div className="font-extrabold h-7">
-        Хэрэглэгчийн интерфейс дизайны шилдэг туршлага
-      </div>
       <SidebarContent>
         <div className="mx-4">
-          {history.map((data, index) => (
-            <div
-              key={index}
-              onClick={() => HistoryOnclick(data)}
-              className="h-6 font-semibold my-2 "
-            >
-              {data.articletitle}
+          {history && (
+            <div>
+              {history.map((data, index) => (
+                <div key={index} className="h-6 font-semibold my-2 ">
+                  <div className="flex w-[223px] justify-between">
+                    <div onClick={() => HistoryOnclick(data)}>{data.title}</div>
+                    <img
+                      onClick={() => DeleteTitle(data)}
+                      src="/delete.svg
+                  "
+                    ></img>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
         <SidebarGroup />
         <SidebarGroup />

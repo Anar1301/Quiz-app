@@ -10,13 +10,12 @@ type HistoryPageProps = {
 const HistoryPage = async ({ searchParams }: HistoryPageProps) => {
   const params = await searchParams;
   const ID = params.id;
-  console.log({ ID });
 
   return (
     <div>
       <div className="mt-10">
         <div className="h-72 mt-50">
-          <History ID={ID}></History>
+          <History></History>
         </div>
       </div>
     </div>

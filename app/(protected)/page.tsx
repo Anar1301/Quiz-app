@@ -23,12 +23,13 @@ export default function Home() {
     "page"
   );
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [Title, setTitle] = useState("");
   const [Summary, setSummary] = useState("");
   const [takeID, setTakeID] = useState("");
   const [generatedtext, setGeneratedtext] = useState<Question[]>([]);
   const [step, setStep] = useState(0);
-  // const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState(0);
 
@@ -42,7 +43,7 @@ export default function Home() {
     const rawData = await response.json();
     const cleanedText = extractJsonArray(rawData.data || rawData);
     setSummary(cleanedText);
-    console.log({ cleanedText });
+
     try {
       // const parsedArray = JSON.parse(cleanedText);
       // console.log({ parsedArray });
@@ -79,9 +80,11 @@ export default function Home() {
     }
   };
 
-  const extractJsonArray = (text: string) => {
-    const match = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-    return match ? match[1].trim() : text.trim();
+  const extractJsonArray = (text: unknown): string => {
+    const safeText = typeof text === "string" ? text : JSON.stringify(text);
+
+    const match = safeText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    return match ? match[1].trim() : safeText.trim();
   };
 
   const HandleOnAnswer = (selectedIndex: number) => {
@@ -144,7 +147,11 @@ export default function Home() {
           />
 
           <div className="flex justify-end">
-            <Button onClick={HandleOnContent} className="mt-5">
+            <Button
+              onClick={HandleOnContent}
+              className="mt-5"
+              disabled={!content}
+            >
               Generate summary
             </Button>
           </div>
