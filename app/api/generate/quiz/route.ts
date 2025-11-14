@@ -8,16 +8,16 @@ const ai = new GoogleGenAI({
 
 export async function POST(req: NextRequest) {
   try {
-    const { Summary, takeID } = await req.json();
+    const { articleSummary, takeID } = await req.json();
 
-    if (!Summary || !takeID) {
+    if (!articleSummary || !takeID) {
       return NextResponse.json(
         { error: "articleSummary болон takeID заавал хэрэгтэй" },
         { status: 400 }
       );
     }
 
-    const prompt = `Generate 5 multiple choice questions based on this article: ${Summary}.
+    const prompt = `Generate 5 multiple choice questions based on this article: ${articleSummary}.
 Return valid JSON like:
 [
   { "question": "Question", "options": ["A","B","C","D"], "answer": "0" }

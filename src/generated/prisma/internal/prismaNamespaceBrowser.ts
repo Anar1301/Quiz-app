@@ -49,8 +49,12 @@ export const AnyNull = runtime.objectEnumValues.instances.AnyNull
 
 
 export const ModelName = {
-  articles: 'articles',
-  quizzes: 'quizzes'
+  user: 'user',
+  article: 'article',
+  quiz: 'quiz',
+  quizattempt: 'quizattempt',
+  quizanswer: 'quizanswer',
+  userscore: 'userscore'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -69,17 +73,32 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const ArticlesScalarFieldEnum = {
+export const UserScalarFieldEnum = {
+  id: 'id',
+  clerk_id: 'clerk_id',
+  email: 'email',
+  name: 'name',
+  createdat: 'createdat',
+  updateat: 'updateat'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const ArticleScalarFieldEnum = {
   id: 'id',
   title: 'title',
   content: 'content',
-  summery: 'summery'
+  summary: 'summary',
+  userid: 'userid',
+  createdat: 'createdat',
+  updateat: 'updateat'
 } as const
 
-export type ArticlesScalarFieldEnum = (typeof ArticlesScalarFieldEnum)[keyof typeof ArticlesScalarFieldEnum]
+export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
 
 
-export const QuizzesScalarFieldEnum = {
+export const QuizScalarFieldEnum = {
   id: 'id',
   question: 'question',
   options: 'options',
@@ -89,7 +108,45 @@ export const QuizzesScalarFieldEnum = {
   updatedat: 'updatedat'
 } as const
 
-export type QuizzesScalarFieldEnum = (typeof QuizzesScalarFieldEnum)[keyof typeof QuizzesScalarFieldEnum]
+export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
+
+
+export const QuizattemptScalarFieldEnum = {
+  id: 'id',
+  userid: 'userid',
+  score: 'score',
+  timespent: 'timespent',
+  createdat: 'createdat',
+  quizid: 'quizid',
+  articletitle: 'articletitle'
+} as const
+
+export type QuizattemptScalarFieldEnum = (typeof QuizattemptScalarFieldEnum)[keyof typeof QuizattemptScalarFieldEnum]
+
+
+export const QuizanswerScalarFieldEnum = {
+  id: 'id',
+  quizattemptid: 'quizattemptid',
+  quizid: 'quizid',
+  question: 'question',
+  selected: 'selected',
+  correct: 'correct',
+  iscorrect: 'iscorrect',
+  createdat: 'createdat'
+} as const
+
+export type QuizanswerScalarFieldEnum = (typeof QuizanswerScalarFieldEnum)[keyof typeof QuizanswerScalarFieldEnum]
+
+
+export const UserscoreScalarFieldEnum = {
+  id: 'id',
+  quizid: 'quizid',
+  userid: 'userid',
+  score: 'score',
+  createdat: 'createdat'
+} as const
+
+export type UserscoreScalarFieldEnum = (typeof UserscoreScalarFieldEnum)[keyof typeof UserscoreScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -98,14 +155,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const NullableJsonNullValueInput = {
-  DbNull: DbNull,
-  JsonNull: JsonNull
-} as const
-
-export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -122,13 +171,4 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

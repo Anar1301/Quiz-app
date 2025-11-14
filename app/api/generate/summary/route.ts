@@ -17,12 +17,11 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { content, title, user } = await req.json();
-    console.log({ user });
+    const { articlecontent, articleTitle, user } = await req.json();
 
-    if (!content || !title) {
+    if (!articlecontent || !articleTitle) {
       return NextResponse.json(
-        { error: "content болон articleTitle заавал хэрэгтэй" },
+        { error: "articlecontent болон articleTitle заавал хэрэгтэй" },
         { status: 400 }
       );
     }
@@ -42,7 +41,7 @@ export async function POST(req: NextRequest) {
     });
 
     // 2️⃣ Gemini AI-аар summary гаргах
-    const prompt = `Please provide a concise summary of the following article: ${content}`;
+    const prompt = `Please provide a concise summary of the following article: ${articlecontent}`;
     const aiResponse = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
@@ -56,8 +55,8 @@ export async function POST(req: NextRequest) {
     // 3️⃣ Article-ийг хэрэглэгчийн ID-тай холбож үүсгэх
     const createdArticle = await prisma.article.create({
       data: {
-        title: title,
-        content: content,
+        title: articleTitle,
+        content: articlecontent,
         summary,
         userid: DeployUser.id, // ← холбоож байна
       },

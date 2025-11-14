@@ -1,37 +1,44 @@
-import { prisma } from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+"use client";
+import { SignIn, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    console.log({ body });
+const Login = () => {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  console.log({ user });
+  useEffect(() => {
+    if (isLoaded && user) {
+      router.push("/");
+    }
+  }, [isLoaded, user]);
 
-    const DeployUser = await prisma.user.upsert({
-      where: {
-        email: body.primaryEmailAddress.emailAddress,
-      },
-      update: {
-        name: body.fullName,
-        clerk_id: body.id,
-      },
-      create: {
-        clerk_id: body.id,
-        email: body.primaryEmailAddress.emailAddress,
-        name: body.fullName,
-      },
-    });
+  const SaveUserInfo = async () => {
+    if (!user) {
+      return;
+    }
 
-    console.log({ DeployUser });
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+      const data = await res.json();
+      console.log({ data });
+    } catch (err: any) {
+      alert("Summary үүсгэхэд алдаа гарлаа: " + err.message);
+    }
+  };
+  useEffect(() => {
+    SaveUserInfo();
+  }, [user]);
 
-    return NextResponse.json({
-      message: "Хэрэглэгч амжилттай үүссэн эсвэл шинэчлэгдсэн.",
-      data: DeployUser,
-    });
-  } catch (err: any) {
-    console.error("POST /api/login error:", err);
-    return NextResponse.json(
-      { error: err.message ?? "Unknown error" },
-      { status: 500 }
-    );
-  }
-}
+  return (
+    <div className="mt-100 ml-150">
+      <SignIn routing="hash" />
+    </div>
+  );
+};
+
+export default Login;
